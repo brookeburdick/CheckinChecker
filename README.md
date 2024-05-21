@@ -67,3 +67,36 @@ Remove the program at: /private/tmp/CheckinChecker (delete the folder)
 **Notes**
 This script has been adapted, added to, and modified from the CasperCheck script. The script was not updated in over 7 years, meant for on-premise servers, and QuickAdd packages are no longer an option. This new program is meant to work with Jamf Pro (cloud). 
 GitHub - rtrouton/CasperCheck (https://github.com/broojamfburd/CheckinChecker/assets/36173452/5b0ffe92-22d7-4eb8-aa0e-919e7b9e6187)
+
+The year is not shown on jamf.log, so the year is assumed to be this year - will need to fix
+
+**Scenarios**
+User last checked in today. – no popup
+ <img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/7c000126-01f4-474d-81ab-687791ad828d">
+
+
+It’s been over 90 days, but CheckinChecker is able to successfully fix the issue and check in – no popup. 
+ <img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/9c4de230-cbe5-42f3-bac9-56593af499d5">
+
+
+It’s been over 90 days, but even after attempting to fix, the Mac still has not checked in – popup.
+ <img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/a482afd9-5062-48d8-aba6-898c273821ec">
+
+
+It’s been over 1 day but less than 90 days since last checkin – no popup
+ <img width="332" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/a8656429-4fac-4055-a2cc-0a0490c02db0">
+
+
+User has no internet – no popup 
+The program will wait up to 1 hour to establish a connection before exiting for the day.
+<img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/ae9a3ea9-910f-4457-8177-9103fcb87369">
+ 
+User does not have the Jamf binary installed (irrespective of last checkin).  - popup
+ <img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/08c52bc5-dad5-4bfb-a5ed-e1594d2a24a0">
+
+
+The Computer has never checked in - popup
+This is rare, but can be found on a newly enrolled Mac or newly re-enrolled Mac
+Resolve by running “sudo jamf policy” in terminal.
+<img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/82711ccc-4ee2-40ea-bf11-a44d8f2e2853">
+
