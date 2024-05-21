@@ -10,6 +10,7 @@ This program is meant to fix devices no longer checking into Jamf, without the n
 **Pop-up**
 
 This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
+
  <img width="372" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/456d76d8-f02c-4a45-b14c-ace95b2d4593">
 
 **Logging**
@@ -26,10 +27,12 @@ Not checkeed in over 90 days:
 3.	Create a policy 	
 a.	First install the pkg  
 b.	Run the script AFTER the pkg is installed
-4.	After that, the program will run in the background of the Mac even if it stops checking into Jamf.
+c. Run once per computer
+5.	After that, the program will run in the background of the Mac even if it stops checking into Jamf.
 
 **Customization**
-(Advanced) This program is customizable, you can customize the pop-up message, scan intervals, and pop-up intervals. Download the pkg, open it, edit, and re-package via composer. 
+(Advanced) 
+This program is customizable, you can customize the pop-up message, scan intervals, and pop-up intervals. Download the pkg, open it, edit, and re-package via composer. 
 
 Pop-up customization:
 /private/tmp/CheckinChecker/CheckinCheckerPrompt.sh
@@ -46,6 +49,8 @@ If you want to change the checkin interval (default 90 days):
 •	Make sure to change all instances of the seconds
 
 For on-prem servers: There is some commented out lines for checking connection to server.
+
+You can customize and then re-package via Jamf. Keep the file names the same! 
 
 **Troubleshooting**
 
