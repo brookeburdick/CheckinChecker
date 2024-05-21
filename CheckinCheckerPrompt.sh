@@ -1,5 +1,5 @@
 #!/bin/bash
-# Part of the CheckinChecker Program
+# Part of 4 of 4 the CheckinChecker Program
 # This script creates a pop-up on the user's screen
 # The associated Launchdaemon will call this script every 5 minutes
 # To customize the pop-up, you can edit the AppleScript
