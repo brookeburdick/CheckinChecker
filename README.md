@@ -12,20 +12,21 @@ This program is meant to fix devices no longer checking into Jamf, without the n
 
 Pop-up
 This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
- 
+ <img width="372" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/456d76d8-f02c-4a45-b14c-ace95b2d4593">
 
 Logging
 As the CheckinChecker runs, it logs all output into the jamflog.log
+Checking in:
+<img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/0a6570cb-37ff-4315-a078-77ac6f5cc681">
+Not checkeed in over 90 days:
+<img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/9815220e-7cd1-461e-be26-e08fc3fd2d77">
 
 Deploy via Jamf
-1.	Upload the kickoff script into Jamf
- 
+1.	Upload the CheckinChecker_StartProgram script into Jamf
 2.	Upload the pkg into Jamf
- 
 3.	Create a policy 	
 a.	First install the pkg  
 b.	Run the script AFTER the pkg is installed
- 
 4.	After that, the program will run in the background of the Mac even if it stops checking into Jamf.
 
 Customization
