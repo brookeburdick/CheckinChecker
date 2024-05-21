@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script is part 1 of the CheckinChecker Program
+# This script is part 1 of 4 of the CheckinChecker Program
 # Upload this script into Jamf and create a policy to run this script AFTER the pkg install
 # Created by: Brooke Burdick brooburd@gmail.com
 # v1 2024
