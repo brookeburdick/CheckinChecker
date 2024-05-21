@@ -60,5 +60,4 @@ Remove the program at: /private/tmp/CheckinChecker (delete the folder)
 
 Notes
 This script has been adapted, added to, and modified from the CasperCheck script. The script was not updated in over 7 years, meant for on-premise servers, and QuickAdd packages are no longer an option. 
-GitHub - rtrouton/CasperCheck
-![image](https://github.com/broojamfburd/CheckinChecker/assets/36173452/5b0ffe92-22d7-4eb8-aa0e-919e7b9e6187)
+GitHub - rtrouton/CasperCheck (https://github.com/broojamfburd/CheckinChecker/assets/36173452/5b0ffe92-22d7-4eb8-aa0e-919e7b9e6187)
