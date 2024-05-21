@@ -1,4 +1,11 @@
 #!/bin/bash
+# Part of the CheckinChecker Program
+# This script creates a pop-up on the user's screen
+# The associated Launchdaemon will call this script every 5 minutes
+# To customize the pop-up, you can edit the AppleScript
+# Created by: Brooke Burdick brooburd@gmail.com
+# v1 2024
+###THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
 
 #logging variables
 log_location="/private/var/tmp/CheckinChecker/jamfcheck.log"
