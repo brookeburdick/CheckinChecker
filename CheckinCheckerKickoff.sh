@@ -1,5 +1,5 @@
 #!/bin/bash
-# Part of the CheckinChecker Program
+# Part 2 of the CheckinChecker Program
 # This script will create the launchdaemon to run the checkinchecker script daily
 # Created by: Brooke Burdick brooburd@gmail.com
 # v1 2024
