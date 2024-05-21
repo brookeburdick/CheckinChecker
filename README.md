@@ -5,7 +5,7 @@ If a Mac has checked in in the past 90 days, it will log the results and exit. I
 
 Once the user checks back into Jamf, the pop-ups will automatically disable. 
 
-This program is meant to fix devices no longer checking into Jamf, but still online and being used, without the need to reach out to users individually. The pop-up is persistent enough users should be compelled to reach out to IT Support. 
+This program is meant to fix devices no longer checking into Jamf, but are still online and being used, without the need to reach out to users individually. The pop-up is persistent enough users should be compelled to reach out to IT Support. 
 
 **Pop-up**
 
