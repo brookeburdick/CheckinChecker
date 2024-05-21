@@ -1,11 +1,11 @@
 # CheckinChecker Program
-This Program runs every day, locally on a Mac, to calculate when it last checked into Jamf. If the This script does not rely on Jamf to work, only to install and kick it off. 
+This Program runs every day, once per day, locally on a Mac to calculate when it last checked into Jamf. The This script does not rely on Jamf to work, only to install and kick it off. 
 
 If a Mac has checked in in the past 90 days, it will log the results and exit. If it has been over 90 days, the CheckinChecker Program will first attempt to fix the binary, and then will create a persistent pop-up urging users to contact IT Support to get their Mac re-enrolled in Jamf. 
 
 Once the user checks back into Jamf, the pop-ups will automatically disable. 
 
-This program is meant to fix devices no longer checking into Jamf, without the need to reach out to users individually. The pop-up is persistent enough users will be compelled to reach out to IT Support. 
+This program is meant to fix devices no longer checking into Jamf, but still online and being used, without the need to reach out to users individually. The pop-up is persistent enough users should be compelled to reach out to IT Support. 
 
 **Pop-up**
 
