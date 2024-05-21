@@ -16,14 +16,6 @@ This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
 
 Logging
 As the CheckinChecker runs, it logs all output into the jamflog.log
-Computer checking in example:
- 
-
-Computer not checked in in over 90 days example:
- 
-
-Every time the pop-up runs, it will log as well:
- 
 
 Deploy via Jamf
 1.	Upload the kickoff script into Jamf
@@ -54,7 +46,6 @@ If you want to change the checkin interval (default 90 days):
 •	Make sure to change all instances of the seconds
 
 For on-prem servers: There is some commented out lines for checking connection to server.
-
 
 Troubleshooting
 If a user calls in to re-enroll, or if there is an error with the prompts, you can run a command in Terminal to stop getting the prompts. This can be added to Self Service as well (but is pretty useless until the user is checking back into Jamf). Once a Mac checks back in, the program will automatically stop the prompts and unload the LaunchDaemon, but it can also be done manually. 
