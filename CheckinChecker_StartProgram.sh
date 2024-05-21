@@ -1,8 +1,9 @@
 #!/bin/bash
-# Part 1/4 CheckinChecker Program
-# This script will create the launchdaemon to kick off the daily script checkinchecker.sh
-# Checkin Checker will run once per day, if it's been determined > 90 days since last check-in, a new launchdaemon will be created
-#This new Launchdaemon will create a pop-up every X seconds to call support and re-enroll
+# This script is part 1 of the CheckinChecker Program
+# Upload this script into Jamf and create a policy to run this script AFTER the pkg install
+# Created by: Brooke Burdick brooburd@gmail.com
+# v1 2024
+###THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
 
 sudo sh "/private/tmp/CheckinChecker/CheckinCheckerKickoff.sh"
 
