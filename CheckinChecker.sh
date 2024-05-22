@@ -8,9 +8,9 @@
 #Enter the JSS server address needed only if on-prem server
 #jss_server_address
 
-log_location="/private/tmp/CheckinChecker/jamfcheck.log"
-touch "/private/tmp/CheckinChecker/jamfcheck.log"
-sudo chmod 755 "/private/tmp/CheckinChecker/jamfcheck.log"
+log_location="/private/tmp/CheckinChecker/CheckinChecker.log"
+touch "/private/tmp/CheckinChecker/CheckinChecker.log"
+sudo chmod 755 "/private/tmp/CheckinChecker/CheckinChecker.log"
 
 # Function to provide logging of the script's actions to
 # the log file defined by the log_location variable
