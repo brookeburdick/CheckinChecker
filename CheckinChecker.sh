@@ -1,6 +1,5 @@
 #!/bin/bash
 # Part 3/4 CheckinChecker Program
-# Main Script
 # Created by: Brooke Burdick brooburd@gmail.com
 # v1 2024
 ###THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
@@ -235,35 +234,28 @@ fi
 
 ScriptLogging "Checking last checkin day."
 LastCheckinDay
-#For testing elapsedTime=7777777
-
+echo $elapsedTime
 echo "Last Checkin date was $checkinNum"
-if [[ $elapsedTime == 0 ]]; then
-  ScriptLogging "Device checked in today."
-  deleteCheckerDaemon > $log_location
+if [[ $elapsedTime -lt 7776000 ]]; then
+ScriptLogging "Device recently checked in. Last checkin was $lastCheckin."
+deleteCheckerDaemon > $log_location
   #If it's been longer than 90 days, attempt to force check in and restart the binary
   #If it still is not checking in, then launch the daemon  
-elif [[ $elapsedTime > 7776001 ]]; then
+elif [[ $elapsedTime -ge 7776001 ]]; then
   ScriptLogging "Device has not checked in in over 90 days. Elapsed Time is $elapsedTime (in seconds). Last Checkin was $lastCheckin"
   ScriptLogging "Attempting to fix Jamf Binary."
   restartBinary 
   sleep 10
-  LastCheckinDay
-  if [[ $elapsedTime == 0 ]]; then
-    ScriptLogging "Device checked in today."
-  elif [[ $elapsedTime > 7776000 ]]; then
+  if [[ $elapsedTime -ge 7776000 ]]; then
     ScriptLogging "Device has not checked in in over 90 days. Last checkin was $lastCheckin."
     ScriptLogging "Creating LaunchDaemon com.checkincheckerprompt."
     checkinCheckerDaemon
-  elif [[ $elapsedTime < 7776000 ]]; then
-    ScriptLogging "Device has not checked in in today. Last checkin was $lastCheckin."
+  elif [[ $elapsedTime -lt 7776000 ]]; then
+    ScriptLogging "Device has recently checked in. Last checkin was $lastCheckin."
   else
     ScriptLogging "Unable to calculate last checkin. Exiting."
     ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
   fi
-elif [[ $elapsedTime < 7776000 ]]; then
-  ScriptLogging "Last checkin was $lastCheckin."
-  deleteCheckerDaemon > $log_location
 else
   ScriptLogging "Unable to calculate last checkin. Exiting."
   ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
