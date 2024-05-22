@@ -1,5 +1,6 @@
 #!/bin/bash
 # Part 3/4 CheckinChecker Program
+# Main Script
 # Created by: Brooke Burdick brooburd@gmail.com
 # v1 2024
 ###THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
@@ -55,12 +56,10 @@ jamf_binary=`/usr/bin/which jamf`
  elif [[ "$jamf_binary" == "" ]] && [[ -e "/usr/sbin/jamf" ]] && [[ -e "/usr/local/bin/jamf" ]]; then
     jamf_binary="/usr/local/bin/jamf"
  fi
-#echo $jamf_binary
-
 }
 
-#find the last check-in day from the jamf.log 
-#output as Month day, no year in the logs, so we have to use this year by default...
+#Find the last check-in day from the jamf.log 
+#Output as Month day, no year in the logs, so we have to use this year by default...
 #If it has been longer than 90 days and all other network checks succeed, proceed to restart Jamf Binary or prompt user to reinstall
 LastCheckinDay () {
 #Before checking last check-in, e need to make sure there have been any check-ins
@@ -226,7 +225,7 @@ elif [[ $jamf_binary == "/usr/local/bin/jamf" ]]; then
   ScriptLogging "Jamf Binary found at $jamf_binary"
 else
     ScriptLogging "Jamf Binary Not Installed, Prompting user to call support"
-    ScriptLogging "********************* EXITING CHECKING CHECKER - NO JAMF BINARY ********************"
+    ScriptLogging "********************* EXITING CHECKIN CHECKER - NO JAMF BINARY ********************"
     checkinCheckerDaemon
     exit 0
 fi  
