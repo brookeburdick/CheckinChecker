@@ -1,0 +1,10 @@
+#!/bin/bash
+#Extension Attribute to see if CheckinChecker is installed
+
+if [[  -f "/private/tmp/CheckinChecker/CheckinChecker.sh" ]];
+then
+	echo "<result>Installed</result>"
+else 
+	echo "<result>Not Installed</result>"
+fi
+	
