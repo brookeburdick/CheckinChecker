@@ -15,7 +15,7 @@ This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
 
 **Logging**
 
-As the CheckinChecker runs, it logs all output into the jamflog.log
+As the CheckinChecker runs, it logs all output into the CheckinChecker.log
 Checking in:
 <img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/0a6570cb-37ff-4315-a078-77ac6f5cc681">
 Not checkeed in over 90 days:
@@ -59,7 +59,7 @@ If a user calls in to re-enroll, or if there is an error with the prompts, you c
 
 sudo launchctl bootout system/com.checkincheckerprompt
 
-Logs can be found at: /private/tmp/CheckinChecker/jamfcheck.log
+Logs can be found at: /private/tmp/CheckinChecker/CheckinChecker.log
 
 Stop the CheckinChecker program (not recommended, this will NOT stop the pop-ups, see the command above): sudo launchctl bootout system/com.checkinchecker
 
@@ -68,8 +68,6 @@ Remove the program at: /private/tmp/CheckinChecker (delete the folder)
 **Notes**
 This script has been adapted, added to, and modified from the CasperCheck script. The script was not updated in over 7 years, meant for on-premise servers, and QuickAdd packages are no longer an option. This new program is meant to work with Jamf Pro (cloud). 
 GitHub - rtrouton/CasperCheck (https://github.com/broojamfburd/CheckinChecker/assets/36173452/5b0ffe92-22d7-4eb8-aa0e-919e7b9e6187)
-
-The year is not shown on jamf.log, so the year is assumed to be this year - will need to fix
 
 **Scenarios**
 User last checked in today. – no popup
