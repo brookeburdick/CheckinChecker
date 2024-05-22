@@ -7,13 +7,24 @@
 function get_user {
 	/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }'
 }
-currentuser=$(get_user)
-today=$(date +”%Y-%b-%d”)
-todayEpoch=$(date +”%s”)
 
-#Every day, Jamf policy will run a policy to write to this file. 
-echo $todayEpoch $today "recurring check-in from Jamf for user $currentuser" >> /private/tmp/CheckinChecker/JamfCheckinLog.txt
+function checkin(){
+	currentuser=$(get_user)
+	today=$(date +”%Y-%b-%d”)
+	todayEpoch=$(date +”%s”)
+	
+	#Every day, Jamf policy will run a policy to write to this file. 
+	echo $todayEpoch $today "recurring check-in from Jamf for user $currentuser" >> /private/tmp/CheckinChecker/JamfCheckinLog.txt
+	
+	echo "Checkin Complete $today"
+}
 
-echo "Checkin Complete $today"
 
+if [[ -f  "/private/tmp/CheckinChecker" ]]
+then	
+checkin
+else 
+mkdir /private/tmp/CheckinChecker
+checkin
+fi
 exit 0
