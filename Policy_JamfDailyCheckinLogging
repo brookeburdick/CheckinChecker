@@ -13,3 +13,7 @@ todayEpoch=$(date +”%s”)
 
 #Every day, Jamf policy will run a policy to write to this file. 
 echo $todayEpoch $today "recurring check-in from Jamf for user $currentuser" >> /private/tmp/CheckinChecker/JamfCheckinLog.txt
+
+echo "Checkin Complete $today"
+
+exit 0
