@@ -15,7 +15,6 @@ sudo chmod 755 "/private/tmp/CheckinChecker/jamfcheck.log"
 # Function to provide logging of the script's actions to
 # the log file defined by the log_location variable
 ScriptLogging(){
-
     DATE=`date +%Y-%m-%d\ %H:%M:%S`
     LOG="$log_location"
     echo "$DATE" " $1" >> $LOG
@@ -58,29 +57,22 @@ jamf_binary=`/usr/bin/which jamf`
 }
 
 #Find the last check-in day from the jamf.log 
-#Output as Month day, no year in the logs, so we have to use this year by default...
 #If it has been longer than 90 days and all other network checks succeed, proceed to restart Jamf Binary or prompt user to reinstall
+#This relies on a companion Jamf policy that runs once per day
 LastCheckinDay () {
-#Before checking last check-in, e need to make sure there have been any check-ins
-  stg='recurring check-in'
-  ln=$(grep "recurring check-in" /private/var/log/jamf.log)e
-  if echo -- '%s' "$ln" | egrep -q -- "$stg"
+#Before checking last check-in, we need to make sure the file exists
+  if [[  -f  "/private/tmp/CheckinChecker/JamfCheckinLog.txt" ]]
   then
-    line=$(grep "recurring check-in" /private/var/log/jamf.log | tail -1 )
-    lastCheckin=$(echo $line | awk '{print $2, $3, $4 }')
-    ScriptLogging "Last Checkin was $lastCheckin"
-  
-    formatDate=$(echo $lastCheckin )
-  
-    ### Validate input
-    ### Read input
-    monStr=$( echo $lastCheckin | awk '{print $1}' )
-    dayNum=$( echo $lastCheckin | awk '{print $2}' )
-    timeNum=$( echo $lastCheckin | awk '{print $3}')
-    hrs=$( echo $timeNum | awk '{print $1}' )
-    mins=$( echo $timeNum | awk '{print $2}' )
-    secs=$( echo $timeNum | awk '{print $3}' )
-    yearNum=$(date +%Y )
+    line=$(grep "recurring check-in" /private/tmp/CheckinChecker/JamfCheckinLog.txt | tail -1 )
+    lastCheckinEpoch=$(echo $line | awk '{ print $1 }')
+    lastCheckinEpoch=$(echo "$lastCheckinEpoch" | tr -cd '[:digit:]. ')
+    lastCheckinDate=$(echo $line | awk '{ print $2 }')
+    lastCheckinDate=$(echo "$lastCheckinDate" | tr '-' ' ' )
+    
+    #Change the month name into a number
+    monStr=$( echo $lastCheckinDate | awk '{print $2}' )
+    dayNum=$( echo $lastCheckinDate | awk '{print $3}' | sed 's/.$//'  )
+    yearNum=$( echo $lastCheckinDate | awk '{print $1}' | sed 's/^.//' )
     if [[ "$monStr" = "Jan" ]]; then
       monNum=01
     elif [[ "$monStr" = "Feb" ]]; then
@@ -106,15 +98,9 @@ LastCheckinDay () {
     elif [[ "$monStr" == "Dec" ]]; then
       monNum=12
     fi
-    checkinNum=$(echo $yearNum-$monNum-$dayNum )
-    #echo "Last Checkin date was $checkinNum"
-      #convert last checkin to epoch time
-      lastCheckinEpoch=$( date -j -f "%Y-%m-%d" "$checkinNum" "+%s")
-      #echo "Last checkin epoch" $lastCheckinEpoch 
-      todayEpoch=$( date $today "+%s")
-      #echo "Today epoch" $todayEpoch 
-      elapsedTime=$(($todayEpoch - $lastCheckinEpoch))
-  # If the logs do not exist or there are no check-ins in the log, it will exit and prompt the user to contact support
+    todayEpoch=$( date $today "+%s")
+    elapsedTime=$(($todayEpoch - $lastCheckinEpoch))
+    # If the logs do not exist or there are no check-ins in the log, it will exit and prompt the user to contact support
   else 
     ScriptLogging "Jamf Checkin/ Log Not Found, Prompting user to call support"
     ScriptLogging "********************* EXITING CHECKIN CHECKER - NO CHECKINS LOGGED ********************"
@@ -234,24 +220,22 @@ fi
 
 ScriptLogging "Checking last checkin day."
 LastCheckinDay
-echo $elapsedTime
-echo "Last Checkin date was $checkinNum"
 if [[ $elapsedTime -lt 7776000 ]]; then
-ScriptLogging "Device recently checked in. Last checkin was $lastCheckin."
+ScriptLogging "Device recently checked in. Last checkin was $lastCheckinDate."
 deleteCheckerDaemon > $log_location
   #If it's been longer than 90 days, attempt to force check in and restart the binary
   #If it still is not checking in, then launch the daemon  
 elif [[ $elapsedTime -ge 7776001 ]]; then
-  ScriptLogging "Device has not checked in in over 90 days. Elapsed Time is $elapsedTime (in seconds). Last Checkin was $lastCheckin"
+  ScriptLogging "Device has not checked in in over 90 days. Elapsed Time is $elapsedTime (in seconds). Last Checkin was $lastCheckinDate"
   ScriptLogging "Attempting to fix Jamf Binary."
   restartBinary 
   sleep 10
   if [[ $elapsedTime -ge 7776000 ]]; then
-    ScriptLogging "Device has not checked in in over 90 days. Last checkin was $lastCheckin."
+    ScriptLogging "Device has not checked in in over 90 days. Last checkin was $lastCheckinDate."
     ScriptLogging "Creating LaunchDaemon com.checkincheckerprompt."
     checkinCheckerDaemon
   elif [[ $elapsedTime -lt 7776000 ]]; then
-    ScriptLogging "Device has recently checked in. Last checkin was $lastCheckin."
+    ScriptLogging "Device has recently checked in. Last checkin was $lastCheckinDate."
   else
     ScriptLogging "Unable to calculate last checkin. Exiting."
     ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
