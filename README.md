@@ -28,6 +28,7 @@ Not checkeed in over 90 days:
 a.	First install the pkg  
 b.	Run the script AFTER the pkg is installed
 c. Run once per computer
+4. Create a policy to run the Checkin Script once per day
 5.	After that, the program will run in the background of the Mac even if it stops checking into Jamf.
 
 **Customization**
