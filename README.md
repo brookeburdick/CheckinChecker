@@ -133,9 +133,10 @@ For on-prem servers: There is some commented out lines for checking connection t
 
 **Troubleshooting**
 
-If a user calls in to re-enroll, or if there is an error with the prompts, you can run a command in Terminal to stop getting the prompts. This can be added to Self Service as well (but is useless until the user is checking back into Jamf). Once a Mac checks back in, the program will automatically stop the prompts and unload the LaunchDaemon, but it can also be done manually. 
+If a user calls in to re-enroll, or if there is an error with the prompts, you can run a command in Terminal to stop getting the prompts. Once a Mac checks back in, the program will automatically stop the prompts and unload the LaunchDaemon, but it can also be done manually. 
+_sudo launchctl bootout system/com.checkincheckerprompt_
 
-sudo launchctl bootout system/com.checkincheckerprompt
+If you do not see any checkin dates in the jamfcheckinlog.txt make sure you have the daily checkin policy deployed.
 
 Logs can be found at: /private/tmp/CheckinChecker/checkinchecker.log
 
