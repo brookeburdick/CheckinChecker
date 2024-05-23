@@ -31,8 +31,11 @@ a.	First add the pkg to install
 <img width="429" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/0b0d82f2-5cbe-4e1e-b536-28dfc328b089">
 
 b.	Run the CheckinChecker_Kickoff and the CheckinChecker_Logging scripts after the pkg is installed  
+
 c.	Run Once per computer
+
 <img width="414" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/9e398838-adca-4586-af32-490db250882a">
+
 d.	This policy should have 1 package and 2 scripts and run once per computer.
  <img width="312" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/671c82b7-41f4-46b7-8e8b-8acdc1092731">
 
