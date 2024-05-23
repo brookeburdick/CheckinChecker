@@ -222,7 +222,7 @@ ScriptLogging "Checking last checkin day."
 LastCheckinDay
 if [[ $elapsedTime -lt 7776000 ]]; then
 ScriptLogging "Device recently checked in. Last checkin was $lastCheckinDate."
-deleteCheckerDaemon > $log_location
+deleteCheckerDaemon
   #If it's been longer than 90 days, attempt to force check in and restart the binary
   #If it still is not checking in, then launch the daemon  
 elif [[ $elapsedTime -ge 7776001 ]]; then
