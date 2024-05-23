@@ -6,14 +6,17 @@ Once the user checks back into Jamf, the pop-ups will automatically disable.
 
 This program is meant to fix devices no longer checking into Jamf, without the need to reach out to users individually and without needing the Jamf binary to be installed or working. The pop-up is persistent enough users will be compelled to reach out to IT Support. 
 
+
 **Pop-up**
 This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
  <img width="372" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/841c884a-2b08-481b-9ea2-c9c31dd107bd">
+
 
 **Components for Deployment**
 •	Two scripts
 •	One extension attribute
 •	One pkg
+
 
 **Deploy via Jamf**
 1.	Upload the Extension attribute to Jamf.
@@ -50,6 +53,7 @@ b.	This policy should have 1 script, scoped to users with CheckinChecker Install
 
 <img width="312" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/27a93696-fa92-4f1f-8a62-7098b05528ca">
 
+
 **Logging**
 As the CheckinChecker runs, it logs all output into the checkinchecker.log
 
@@ -60,6 +64,7 @@ Example:
 Computer not checked in in over 90 days example:
 
  <img width="459" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/8613c980-a90f-4455-b23b-545597ef5dc3">
+
 
 **Log Scenarios**
 User last checked in today. – no popup
@@ -96,6 +101,7 @@ This is rare, but can be found on a newly enrolled Mac, a newly re-enrolled Mac,
 
 <img width="468" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/34d9fc13-8f01-4513-a7b2-d7172983e92f">
 
+
 **Customization**
 (Advanced) This program is customizable, you can customize the pop-up message, scan intervals, and pop-up intervals. Download the pkg, open it, edit, and re-package via composer. 
 
@@ -115,6 +121,7 @@ If you want to change the last checkin trigger (default 90 days):
 
 For on-prem servers: There is some commented out lines for checking connection to server, but is not tested.
 
+
 **Troubleshooting**
 If a user calls in to re-enroll, or if there is an error with the prompts, you can run a command in Terminal to stop getting the prompts. This can be added to Self Service as well (but is useless until the user is checking back into Jamf). Once a Mac checks back in, the program will automatically stop the prompts and unload the LaunchDaemon, but it can also be done manually. 
 
@@ -126,8 +133,8 @@ Stop the CheckinChecker program (not recommended, this will NOT stop the pop-ups
 
 Remove the program at: /private/tmp/CheckinChecker (delete the folder)
 
+
 **Notes**
 This script has been adapted, added to, and modified from the CasperCheck script. The script was not updated in over 7 years, meant for on-premise servers, and QuickAdd packages are no longer an option. 
 GitHub - rtrouton/CasperCheck
 
-![image](https://github.com/broojamfburd/CheckinChecker/assets/36173452/95aa1163-c8f9-4f3f-9c37-73e06a8c71a5)
