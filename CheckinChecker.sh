@@ -152,7 +152,7 @@ checkinCheckerDaemon(){
   sudo launchctl load /private/tmp/CheckinChecker/checkincheckerprompt.plist
 }
 
-deleteCheckerDaemon (){
+deleteCheckerDaemon(){
   if [[ -f "/private/tmp/CheckinChecker/checkincheckerprompt.plist" ]]; then
     sudo launchctl bootout system/com.checkincheckerprompt
     rm -f /private/tmp/CheckinChecker/checkincheckerprompt.plist
@@ -224,7 +224,8 @@ LastCheckinDay
 #This condition checks if the device has ever checked in, if not it defaults to 00000
 if [[ $lastCheckinEpoch == 00000 ]]; then
   ScriptLogging "Device never checked in, attempting to check in. Will try again tomorrow."
-  forceCheckin 
+  forceCheckin
+  deleteCheckerDaemon
   ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
   exit 1
 elif [[ $elapsedTime -lt 7776000 ]]; then
@@ -243,6 +244,7 @@ elif [[ $elapsedTime -ge 7776001 ]]; then
     checkinCheckerDaemon
   elif [[ $elapsedTime -lt 7776000 ]]; then
     ScriptLogging "Device has recently checked in. Last checkin was $lastCheckinDate."
+    deleteCheckerDaemon
   else
     ScriptLogging "Unable to calculate last checkin. Exiting."
     ScriptLogging "********************* EXITING CHECKING CHECKER - UNABLE TO CALCULATE ********************"
