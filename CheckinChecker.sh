@@ -225,7 +225,6 @@ LastCheckinDay
 if [[ $lastCheckinEpoch == 00000 ]]; then
   ScriptLogging "Device never checked in, attempting to check in. Will try again tomorrow."
   forceCheckin
-  deleteCheckerDaemon
   ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
   exit 1
 elif [[ $elapsedTime -lt 7776000 ]]; then
