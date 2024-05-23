@@ -27,19 +27,20 @@ This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
 **Deploy via Jamf**
 
 1.	Upload the Extension attribute to Jamf.
-2.	Upload CheckinCheckerKickoff.sh and CheckinChecker_Logging.sh scripts into Jamf
-3.	Create a smart group for all devices with CheckinChecker installed (CheckinChecker=Installed)
+
+2.	Create a smart group for all devices with CheckinChecker installed (CheckinChecker=Installed)
    
    <img width="417" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/2340bb57-60cb-423d-8af6-803c589ca322">
 
- 
+3.	Upload CheckinCheckerKickoff.sh and CheckinChecker_Logging.sh scripts into Jamf
+4.	
 <img width="339" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/dcd88d82-1d27-4d47-a571-e289ebabcef3">
 <img width="414" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/c3ce4076-74b8-44fc-90c3-e82e0d079432">
 
-4.	Upload the CheckinChecker pkg into Jamf
+5.	Upload the CheckinChecker pkg into Jamf
 <img width="310" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/cb37bfc3-ec19-4ec2-8a09-ce794d53a095">
 
-5.	Create a policy to install CheckinChecker
+6.	Create a policy to install CheckinChecker
 a.	First add the pkg to install
 <img width="429" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/0b0d82f2-5cbe-4e1e-b536-28dfc328b089">
 
