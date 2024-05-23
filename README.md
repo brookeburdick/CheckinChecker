@@ -59,6 +59,7 @@ b.	This policy should have 1 script, scoped to users with CheckinChecker Install
 <img width="312" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/27a93696-fa92-4f1f-8a62-7098b05528ca">
 
 
+
 **Logging**
 
 As the CheckinChecker runs, it logs all output into the checkinchecker.log
