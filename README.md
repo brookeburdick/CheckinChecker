@@ -30,8 +30,7 @@ This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
 2.	Upload CheckinCheckerKickoff.sh and CheckinChecker_Logging.sh scripts into Jamf
  
 <img width="339" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/dcd88d82-1d27-4d47-a571-e289ebabcef3">
-
- <img width="372" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/56844073-2aef-43e4-a1ab-03fb05cd502e">
+<img width="414" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/c3ce4076-74b8-44fc-90c3-e82e0d079432">
 
 3.	Upload the CheckinChecker pkg into Jamf
 <img width="310" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/cb37bfc3-ec19-4ec2-8a09-ce794d53a095">
