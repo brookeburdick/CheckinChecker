@@ -27,3 +27,5 @@
   sudo chown root:wheel /private/tmp/CheckinChecker/checkinchecker.plist
   sudo chmod 755 /private/tmp/CheckinChecker/checkinchecker.plist
   sudo launchctl load /private/tmp/CheckinChecker/checkinchecker.plist
+
+  echo "Checkin Checker Installed..."
