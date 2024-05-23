@@ -1,4 +1,4 @@
-#CheckinChecker Program
+**CheckinChecker Program**
 
 CheckinChecker runs every day, locally on a Mac, to calculate when it last checked into Jamf and take action if it has not checked in in over 90 days. If a Mac has checked in in the past 90 days, it will log the results and exit. If it has been over 90 days, the CheckinChecker Program will first attempt to fix the binary, and then will create a persistent pop-up urging users to contact IT Support to get their Mac re-enrolled in Jamf. 
 
