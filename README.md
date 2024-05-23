@@ -10,7 +10,9 @@ This program is meant to fix devices no longer checking into Jamf, without the n
 **Pop-up**
 
 This pop-up will pop up every 5 minutes until the user re-enrolls in Jamf.
+
  <img width="372" alt="image" src="https://github.com/broojamfburd/CheckinChecker/assets/36173452/841c884a-2b08-481b-9ea2-c9c31dd107bd">
+ 
 
 
 **Components for Deployment**
