@@ -112,6 +112,7 @@ LastCheckinDay () {
 forceCheckin(){
   ScriptLogging "Running Recon"
   sudo $jamf_binary recon  >> $log_location
+  sudo $jamf_binary policy >> $log_location
   #sudo $jamf_binary policy  >> $log_location
   sleep 10
 }
@@ -127,7 +128,6 @@ restartBinary(){
 
 # This daemon will run if it's been over 90 days since last checkin
 # The Daemon will create a pop-up every 5 minutes
-# You can customize the pop-up here
 checkinCheckerDaemon(){
   echo "<?xml version="1.0" encoding="UTF-8"?>
   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -217,14 +217,14 @@ else
     checkinCheckerDaemon
     exit 1
 fi  
-
 #STEP 3: CHECK LAST CHECKIN DATE
 #If it's been over 90 days, it will attempt to fix binary, and then the launchdaemon will be created to run a prompt every 5 minutes to call support
 ScriptLogging "Checking last checkin day."
 LastCheckinDay
 #This condition checks if the device has ever checked in, if not it defaults to 00000
 if [[ $lastCheckinEpoch == 00000 ]]; then
-  ScriptLogging "Device Never Checked in, Exiting. Will try again tomorrow."
+  ScriptLogging "Device never checked in, attempting to check in. Will try again tomorrow."
+  forceCheckin 
   ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
   exit 1
 elif [[ $elapsedTime -lt 7776000 ]]; then
