@@ -1,13 +1,13 @@
 #!/bin/bash
 # This is the main script, it will run daily to check the Mac's last checkin date, if it's been over 90 days it will create a new process to prompt the user to call support
+# This script is called by a Launch Daemon, not Jamf itself, so it runs locally
 # Created by: Brooke Burdick brooburd@gmail.com
 # v1 2024
 ###THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.###
-
-
 #Enter the JSS server address needed only if on-prem server
 #jss_server_address
 
+#This is the location everything will be logged
 log_location="/private/tmp/CheckinChecker/CheckinChecker.log"
 touch "/private/tmp/CheckinChecker/CheckinChecker.log"
 sudo chmod 755 "/private/tmp/CheckinChecker/CheckinChecker.log"
@@ -56,9 +56,8 @@ jamf_binary=`/usr/bin/which jamf`
  fi
 }
 
-#Find the last check-in day from the jamf.log 
-#If it has been longer than 90 days and all other network checks succeed, proceed to restart Jamf Binary or prompt user to reinstall
-#This relies on a companion Jamf policy that runs once per day
+# Finds the last check-in day from the /private/tmp/CheckinChecker/JamfCheckinLog.txt 
+# This relies on a companion Jamf policy that runs once per day
 LastCheckinDay () {
 #Before checking last check-in, we need to make sure the file exists
   if [[  -f  "/private/tmp/CheckinChecker/JamfCheckinLog.txt" ]]
@@ -105,11 +104,11 @@ LastCheckinDay () {
     ScriptLogging "Jamf Checkin/ Log Not Found, Prompting user to call support"
     ScriptLogging "********************* EXITING CHECKIN CHECKER - NO CHECKINS LOGGED ********************"
     checkinCheckerDaemon
-    exit 0
+    exit 1
   fi 
 }
 
-#Jamf recon
+# In an attempt to fix jamf binary, force checkin
 forceCheckin(){
   ScriptLogging "Running Recon"
   sudo $jamf_binary recon  >> $log_location
@@ -117,7 +116,7 @@ forceCheckin(){
   sleep 10
 }
 
-#Restart Jamf binary
+#Restart Jamf binary to try to repair it
 restartBinary(){
   ScriptLogging "Restarting Jamf Binary..."
   sudo killall jamf
@@ -126,6 +125,9 @@ restartBinary(){
   sudo $jamf_binary recon
 }
 
+# This daemon will run if it's been over 90 days since last checkin
+# The Daemon will create a pop-up every 5 minutes
+# You can customize the pop-up here
 checkinCheckerDaemon(){
   echo "<?xml version="1.0" encoding="UTF-8"?>
   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -159,6 +161,7 @@ deleteCheckerDaemon (){
 }
 #End Functions
 
+# Main Body
 ScriptLogging "******************** STARTING CHECKIN CHECKER ********************"
 # Wait up to 60 minutes for a network connection to become 
 # available which doesn't use a loopback address. This 
@@ -185,14 +188,14 @@ done
 
 if [[ "${NETWORKUP}" != "-YES-" ]]; then
    ScriptLogging "********************* EXITING CHECKIN CHECKER - NO NETWORK ********************"
-    exit 0
+    exit 1
 elif [[ "${NETWORKUP}" == "-YES-" ]]; then
    ScriptLogging "Network connection appears to be live."
 else
   ScriptLogging "Error getting Network Status"
 fi  
 
-#CHECK DEVICE CAN REACH JSS SERVER
+# CHECK DEVICE CAN REACH JSS SERVER
 # ON-PREM ONLY
 # CheckSiteNetwork
 # if [[ "$site_network" == "False" ]]; then
@@ -201,7 +204,7 @@ fi
 #  ScriptLogging "Access to JSS Server verified"
 # fi
 
-#CHECK JAMF BINARY EXISTS
+# STEP 2: CHECK JAMF BINARY EXISTS
 ScriptLogging "Checking for Jamf Binary"
 CheckBinary
 if [[ $jamf_binary == "/usr/sbin/jamf" ]]; then
@@ -212,15 +215,19 @@ else
     ScriptLogging "Jamf Binary Not Installed, Prompting user to call support"
     ScriptLogging "********************* EXITING CHECKIN CHECKER - NO JAMF BINARY ********************"
     checkinCheckerDaemon
-    exit 0
+    exit 1
 fi  
 
-#CHECK LAST CHECKIN DATE
-#If it's been over 90 days, it will attempt to fix binary, and then a launchdaemon will be created to run a prompt every X minutes to call support
-
+#STEP 3: CHECK LAST CHECKIN DATE
+#If it's been over 90 days, it will attempt to fix binary, and then the launchdaemon will be created to run a prompt every 5 minutes to call support
 ScriptLogging "Checking last checkin day."
 LastCheckinDay
-if [[ $elapsedTime -lt 7776000 ]]; then
+#This condition checks if the device has ever checked in, if not it defaults to 00000
+if [[ $lastCheckinEpoch == 00000 ]]; then
+  ScriptLogging "Device Never Checked in, Exiting. Will try again tomorrow."
+  ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
+  exit 1
+elif [[ $elapsedTime -lt 7776000 ]]; then
 ScriptLogging "Device recently checked in. Last checkin was $lastCheckinDate."
 deleteCheckerDaemon
   #If it's been longer than 90 days, attempt to force check in and restart the binary
@@ -238,12 +245,12 @@ elif [[ $elapsedTime -ge 7776001 ]]; then
     ScriptLogging "Device has recently checked in. Last checkin was $lastCheckinDate."
   else
     ScriptLogging "Unable to calculate last checkin. Exiting."
-    ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
-  fi
+    ScriptLogging "********************* EXITING CHECKING CHECKER - UNABLE TO CALCULATE ********************"
+  fi  
 else
   ScriptLogging "Unable to calculate last checkin. Exiting."
-  ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
-  exit 0
+  ScriptLogging "********************* EXITING CHECKING CHECKER - UNABLE TO CALCULATE ********************"
+  exit 1
 fi	
 
 ScriptLogging "******************** CHECKIN CHECKER COMPLETE ********************"
