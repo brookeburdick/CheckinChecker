@@ -206,20 +206,18 @@ fi
 
 # STEP 2: CHECK JAMF BINARY EXISTS
 ScriptLogging "Checking for Jamf Binary"
-CheckBinary
-if [[ $jamf_binary == "/usr/sbin/jamf" ]]; then
-  ScriptLogging "Jamf Binary found at" $jamf_binary
-elif [[ $jamf_binary == "/usr/local/bin/jamf" ]]; then
-  ScriptLogging "Jamf Binary found at $jamf_binary"
-else
+CheckBinary(){
+  if [[ $jamf_binary == "/usr/sbin/jamf" ]]; then
+    ScriptLogging "Jamf Binary found at" $jamf_binary
+  elif [[ $jamf_binary == "/usr/local/bin/jamf" ]]; then
+    ScriptLogging "Jamf Binary found at $jamf_binary"
+  else
     ScriptLogging "Jamf Binary Not Installed, Prompting user to call support"
     ScriptLogging "********************* EXITING CHECKIN CHECKER - NO JAMF BINARY ********************"
     checkinCheckerDaemon
     exit 1
-fi  
-
-# Check last checkin day, take action
-# If over 90 days, trigger the prompt
+  fi  
+}
 
 ScriptLogging "Checking last checkin day."
 LastCheckinDay
