@@ -12,6 +12,7 @@
     <string>com.checkinchecker</string>
     <key>ProgramArguments</key>
     <array>
+      <string>/usr/bin/sudo</string>
       <string>/bin/sh</string> 
       <string>/private/var/tmp/CheckinChecker/CheckinChecker.sh</string>
     </array>
@@ -26,6 +27,6 @@
   sudo chmod 755 ~/Library/LaunchAgents/com.checkinchecker.plist
   
 uid=$(echo $UID)
-sudo launchctl enable gui/$uid/com.checkinchecker
+launchctl load ~/Library/LaunchAgents/com.checkinchecker.plist
+launchctl enable gui/$uid/com.checkinchecker
 launchctl kickstart -kp gui/$uid/com.checkinchecker
-#sudo launchctl load ~/Library/LaunchAgents/com.checkinchecker.plist
