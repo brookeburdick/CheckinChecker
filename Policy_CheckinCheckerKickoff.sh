@@ -18,7 +18,7 @@
     <key>RunAtLoad</key>
     <true/>
     <key>StartInterval</key>
-    <integer>60</integer> 
+    <integer>600</integer> 
   </dict>
   </plist>" > ~/Library/LaunchAgents/com.checkinchecker.plist
   
