@@ -18,10 +18,14 @@
     <key>RunAtLoad</key>
     <true/>
     <key>StartInterval</key>
-    <integer>43200</integer> 
+    <integer>60</integer> 
   </dict>
-  </plist>" > /private/var/tmp/CheckinChecker/checkinchecker.plist
+  </plist>" > ~/Library/LaunchAgents/com.checkinchecker.plist
   
-  sudo chown root:wheel /private/var/tmp/CheckinChecker/checkinchecker.plist
-  sudo chmod 755 /private/var/tmp/CheckinChecker/checkinchecker.plist
-  sudo launchctl load /private/var/tmp/CheckinChecker/checkinchecker.plist
+  sudo chown root:wheel ~/Library/LaunchAgents/com.checkinchecker.plist
+  sudo chmod 755 ~/Library/LaunchAgents/com.checkinchecker.plist
+  
+uid=$(echo $UID)
+sudo launchctl enable gui/$uid/com.checkinchecker
+launchctl kickstart -kp gui/$uid/com.checkinchecker
+#sudo launchctl load ~/Library/LaunchAgents/com.checkinchecker.plist
