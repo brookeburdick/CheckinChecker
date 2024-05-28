@@ -45,7 +45,7 @@ CheckForNetwork(){
 #}
 
 # Identify location of jamf binary.
-CheckBinary (){
+CheckBinaryLocation (){
 jamf_binary=`/usr/bin/which jamf`
  if [[ "$jamf_binary" == "" ]] && [[ -e "/usr/sbin/jamf" ]] && [[ ! -e "/usr/local/bin/jamf" ]]; then
     jamf_binary="/usr/sbin/jamf"
@@ -54,6 +54,20 @@ jamf_binary=`/usr/bin/which jamf`
  elif [[ "$jamf_binary" == "" ]] && [[ -e "/usr/sbin/jamf" ]] && [[ -e "/usr/local/bin/jamf" ]]; then
     jamf_binary="/usr/local/bin/jamf"
  fi
+}
+
+CheckBinary(){
+  CheckBinaryLocation
+  if [[ $jamf_binary == "/usr/sbin/jamf" ]]; then
+    ScriptLogging "Jamf Binary found at" $jamf_binary
+  elif [[ $jamf_binary == "/usr/local/bin/jamf" ]]; then
+    ScriptLogging "Jamf Binary found at $jamf_binary"
+  else
+    ScriptLogging "Jamf Binary Not Installed, Prompting user to call support"
+    ScriptLogging "********************* EXITING CHECKIN CHECKER - NO JAMF BINARY ********************"
+    checkinCheckerDaemon
+    exit 1
+  fi  
 }
 
 # Finds the last check-in day from the /private/var/tmpCheckinChecker/JamfCheckinLog.txt 
@@ -133,32 +147,39 @@ checkinCheckerDaemon(){
   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
   <plist version="1.0">
   <dict>
-    <key>Label</key>
-    <string>com.checkincheckerprompt</string>
-    <key>ProgramArguments</key>
-    <array>
-      <string>/bin/sh</string> 
-      <string>/private/var/tmp/CheckinChecker/CheckinCheckerPrompt.sh</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>StartInterval</key>
-    <integer>300</integer> 
+  <key>Label</key>
+  <string>com.checkincheckerprompt</string>
+  <key>ProgramArguments</key>
+  <array>
+  <string>/bin/sh</string> 
+  <string>/private/var/tmp/CheckinChecker/CheckinCheckerPrompt.sh</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>60</integer> 
   </dict>
-  </plist>" > /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
+  </plist>" > ~/Library/LaunchAgents/com.checkincheckerprompt.plist
   
-  sudo chown root:wheel /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
-  sudo chmod 755 /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
-  sudo launchctl load /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
+  sudo chown root:wheel ~/Library/LaunchAgents/com.checkincheckerprompt.plist
+  sudo chmod 755 ~/Library/LaunchAgents/com.checkincheckerprompt.plist
+  
+uid=$(echo $UID)
+sudo launchctl enable gui/$uid/com.checkincheckerprompt
+launchctl kickstart -kp gui/$uid/com.checkincheckerprompt
 }
 
 deleteCheckerDaemon (){
-  if [[ -f "/private/var/tmp/CheckinChecker/checkincheckerprompt.plist" ]]; then
-    sudo launchctl bootout system/com.checkincheckerprompt
-    rm -f /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
-    ScriptLogging "Removed checkincheckerprompt.plist, User will receive no more prompts"
+uid=$(echo $UID)  
+  if [[ -f "~/Library/LaunchAgents/com.checkincheckerprompt.plist" ]]; then
+    sudo launchctl disable gui/$uid/com.checkincheckerprompt
+    sudo launchctl bootout gui/$uid/com.checkincheckerprompt
+    sudo rm - f ~/Library/LaunchAgents/com.checkincheckerprompt.plist
+    ScriptLogging "Disabled checkincheckerprompt.plist, User will receive no more prompts"
   fi
 }
+
+
 #End Functions
 
 # Main Body
@@ -173,51 +194,40 @@ ScriptLogging "******************** STARTING CHECKIN CHECKER *******************
 #STEP1: CHECK NETWORK
 ScriptLogging "Checking for active network connection."
 CheckForNetwork
-i=1
-while [[ "${NETWORKUP}" != "-YES-" ]] && [[ $i -ne 720 ]]
-do
+  i=1
+  while [[ "${NETWORKUP}" != "-YES-" ]] && [[ $i -ne 720 ]]
+  do
     sleep 5
     NETWORKUP=
     CheckForNetwork
     echo $i
     i=$(( $i + 1 ))
-done
-
-# If no network connection is found within 60 minutes,
-# the script will exit.
-
-if [[ "${NETWORKUP}" != "-YES-" ]]; then
-   ScriptLogging "********************* EXITING CHECKIN CHECKER - NO NETWORK ********************"
+  done
+  
+  # If no network connection is found within 60 minutes,
+  # the script will exit.
+  
+  if [[ "${NETWORKUP}" != "-YES-" ]]; then
+    ScriptLogging "********************* EXITING CHECKIN CHECKER - NO NETWORK ********************"
     exit 1
-elif [[ "${NETWORKUP}" == "-YES-" ]]; then
-   ScriptLogging "Network connection appears to be live."
-else
-  ScriptLogging "Error getting Network Status"
-fi  
-
-# CHECK DEVICE CAN REACH JSS SERVER
-# ON-PREM ONLY
-# CheckSiteNetwork
-# if [[ "$site_network" == "False" ]]; then
-# ScriptLogging "Unable to verify connection to JSS Server."
-# elif [[ "$site_network" == "True" ]]; then
-#  ScriptLogging "Access to JSS Server verified"
-# fi
+  elif [[ "${NETWORKUP}" == "-YES-" ]]; then
+    ScriptLogging "Network connection appears to be live."
+  else
+    ScriptLogging "Error getting Network Status"
+  fi  
+  
+  # CHECK DEVICE CAN REACH JSS SERVER
+  # ON-PREM ONLY
+  # CheckSiteNetwork
+  # if [[ "$site_network" == "False" ]]; then
+  # ScriptLogging "Unable to verify connection to JSS Server."
+  # elif [[ "$site_network" == "True" ]]; then
+  #  ScriptLogging "Access to JSS Server verified"
+  # fi
 
 # STEP 2: CHECK JAMF BINARY EXISTS
 ScriptLogging "Checking for Jamf Binary"
-CheckBinary(){
-  if [[ $jamf_binary == "/usr/sbin/jamf" ]]; then
-    ScriptLogging "Jamf Binary found at" $jamf_binary
-  elif [[ $jamf_binary == "/usr/local/bin/jamf" ]]; then
-    ScriptLogging "Jamf Binary found at $jamf_binary"
-  else
-    ScriptLogging "Jamf Binary Not Installed, Prompting user to call support"
-    ScriptLogging "********************* EXITING CHECKIN CHECKER - NO JAMF BINARY ********************"
-    checkinCheckerDaemon
-    exit 1
-  fi  
-}
+CheckBinary
 
 ScriptLogging "Checking last checkin day."
 LastCheckinDay
