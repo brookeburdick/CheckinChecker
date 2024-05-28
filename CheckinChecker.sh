@@ -144,7 +144,7 @@ restartBinary(){
 # The Daemon will create a pop-up every 5 minutes
 checkinCheckerDaemon(){
   echo "<?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
   <plist version="1.0">
   <dict>
   <key>Label</key>
@@ -157,27 +157,30 @@ checkinCheckerDaemon(){
   <key>RunAtLoad</key>
   <true/>
   <key>StartInterval</key>
-  <integer>60</integer> 
+  <integer>300</integer> 
   </dict>
   </plist>" > ~/Library/LaunchAgents/com.checkincheckerprompt.plist
   
   sudo chown root:wheel ~/Library/LaunchAgents/com.checkincheckerprompt.plist
   sudo chmod 755 ~/Library/LaunchAgents/com.checkincheckerprompt.plist
   
-uid=$(echo $UID)
-sudo launchctl enable gui/$uid/com.checkincheckerprompt
-launchctl kickstart -kp gui/$uid/com.checkincheckerprompt
+  uid=$(echo $UID)
+  launchctl load ~/Library/LaunchAgents/com.checkincheckerprompt.plist
+  launchctl enable gui/$uid/com.checkincheckerprompt
+  launchctl kickstart -kp gui/$uid/com.checkincheckerprompt
 }
 
 deleteCheckerDaemon (){
-uid=$(echo $UID)  
-  if [[ -f "~/Library/LaunchAgents/com.checkincheckerprompt.plist" ]]; then
-    sudo launchctl disable gui/$uid/com.checkincheckerprompt
+  uid=$(echo $UID)  
+  if [[ -f "/Users/brookeburdick/Library/LaunchAgents/com.checkincheckerprompt.plist" ]]; then
+    echo "Checking checker prompt found, Disabling Launch Agent"
     sudo launchctl bootout gui/$uid/com.checkincheckerprompt
-    sudo rm - f ~/Library/LaunchAgents/com.checkincheckerprompt.plist
+    sudo rm -f ~/Library/LaunchAgents/com.checkincheckerprompt.plist
     ScriptLogging "Disabled checkincheckerprompt.plist, User will receive no more prompts"
-  fi
-}
+  else 
+    ScriptLogging "No Checkin Checker Prompt Found."
+    fi
+  }
 
 
 #End Functions
