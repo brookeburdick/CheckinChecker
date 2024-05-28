@@ -8,9 +8,9 @@
 #jss_server_address
 
 #This is the location everything will be logged
-log_location="/private/tmp/CheckinChecker/CheckinChecker.log"
-touch "/private/tmp/CheckinChecker/CheckinChecker.log"
-sudo chmod 755 "/private/tmp/CheckinChecker/CheckinChecker.log"
+log_location="/private/var/tmp/CheckinChecker/CheckinChecker.log"
+touch "/private/var/tmp/CheckinChecker/CheckinChecker.log"
+sudo chmod 755 "/private/var/tmp/CheckinChecker/CheckinChecker.log"
 
 # Function to provide logging of the script's actions to
 # the log file defined by the log_location variable
@@ -56,13 +56,13 @@ jamf_binary=`/usr/bin/which jamf`
  fi
 }
 
-# Finds the last check-in day from the /private/tmp/CheckinChecker/JamfCheckinLog.txt 
+# Finds the last check-in day from the /private/var/tmpCheckinChecker/JamfCheckinLog.txt 
 # This relies on a companion Jamf policy that runs once per day
 LastCheckinDay () {
 #Before checking last check-in, we need to make sure the file exists
-  if [[  -f  "/private/tmp/CheckinChecker/JamfCheckinLog.txt" ]]
+  if [[  -f  "/private/var/tmp/CheckinChecker/JamfCheckinLog.txt" ]]
   then
-    line=$(grep "recurring check-in" /private/tmp/CheckinChecker/JamfCheckinLog.txt | tail -1 )
+    line=$(grep "recurring check-in" /private/var/tmp/CheckinChecker/JamfCheckinLog.txt | tail -1 )
     lastCheckinEpoch=$(echo $line | awk '{ print $1 }')
     lastCheckinEpoch=$(echo "$lastCheckinEpoch" | tr -cd '[:digit:]. ')
     lastCheckinDate=$(echo $line | awk '{ print $2 }')
@@ -138,24 +138,24 @@ checkinCheckerDaemon(){
     <key>ProgramArguments</key>
     <array>
       <string>/bin/sh</string> 
-      <string>/private/tmp/CheckinChecker/CheckinCheckerPrompt.sh</string>
+      <string>/private/var/tmp/CheckinChecker/CheckinCheckerPrompt.sh</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
     <key>StartInterval</key>
     <integer>300</integer> 
   </dict>
-  </plist>" > /private/tmp/CheckinChecker/checkincheckerprompt.plist
+  </plist>" > /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
   
-  sudo chown root:wheel /private/tmp/CheckinChecker/checkincheckerprompt.plist
-  sudo chmod 755 /private/tmp/CheckinChecker/checkincheckerprompt.plist
-  sudo launchctl load /private/tmp/CheckinChecker/checkincheckerprompt.plist
+  sudo chown root:wheel /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
+  sudo chmod 755 /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
+  sudo launchctl load /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
 }
 
-deleteCheckerDaemon(){
-  if [[ -f "/private/tmp/CheckinChecker/checkincheckerprompt.plist" ]]; then
+deleteCheckerDaemon (){
+  if [[ -f "/private/var/tmp/CheckinChecker/checkincheckerprompt.plist" ]]; then
     sudo launchctl bootout system/com.checkincheckerprompt
-    rm -f /private/tmp/CheckinChecker/checkincheckerprompt.plist
+    rm -f /private/var/tmp/CheckinChecker/checkincheckerprompt.plist
     ScriptLogging "Removed checkincheckerprompt.plist, User will receive no more prompts"
   fi
 }
@@ -217,14 +217,16 @@ else
     checkinCheckerDaemon
     exit 1
 fi  
-#STEP 3: CHECK LAST CHECKIN DATE
-#If it's been over 90 days, it will attempt to fix binary, and then the launchdaemon will be created to run a prompt every 5 minutes to call support
+
+# Check last checkin day, take action
+# If over 90 days, trigger the prompt
+
 ScriptLogging "Checking last checkin day."
 LastCheckinDay
 #This condition checks if the device has ever checked in, if not it defaults to 00000
 if [[ $lastCheckinEpoch == 00000 ]]; then
   ScriptLogging "Device never checked in, attempting to check in. Will try again tomorrow."
-  forceCheckin
+  forceCheckin 
   ScriptLogging "********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************"
   exit 1
 elif [[ $elapsedTime -lt 7776000 ]]; then
@@ -243,7 +245,6 @@ elif [[ $elapsedTime -ge 7776001 ]]; then
     checkinCheckerDaemon
   elif [[ $elapsedTime -lt 7776000 ]]; then
     ScriptLogging "Device has recently checked in. Last checkin was $lastCheckinDate."
-    deleteCheckerDaemon
   else
     ScriptLogging "Unable to calculate last checkin. Exiting."
     ScriptLogging "********************* EXITING CHECKING CHECKER - UNABLE TO CALCULATE ********************"
