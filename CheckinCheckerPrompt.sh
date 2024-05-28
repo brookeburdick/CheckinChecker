@@ -21,4 +21,4 @@ ScriptLogging(){
 #Ask User to Contact Support via pop-up, LaunchDaemon will run this at intervals
 ScriptLogging "Prompting User to Contact support to re-enroll machine."
 osascript <<EOD
-	display dialog "Your Mac is no longer protected by Parachute security software. \n\nPlease save your work and contact Parachute Support immediately to re-enroll your Mac.\n\nTelephone: 415-762-0720\nEmail: Support@parachutetechs.com" with title "Immediate Action Required" with icon posix file "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns" buttons {"I Understand"} default button 1
+	display dialog "Your Mac is no longer protected by MDM software. \n\nPlease save your work and contact IT Support immediately to re-enroll your Mac." with title "Immediate Action Required" with icon posix file "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns" buttons {"I Understand"} default button 1
