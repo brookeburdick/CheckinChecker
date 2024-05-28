@@ -12,7 +12,6 @@
     <string>com.checkinchecker</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/usr/bin/sudo</string>
       <string>/bin/sh</string> 
       <string>/private/var/tmp/CheckinChecker/CheckinChecker.sh</string>
     </array>
