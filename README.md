@@ -121,16 +121,16 @@ This is rare, but can be found on a newly enrolled Mac, a newly re-enrolled Mac,
 (Advanced) This program is customizable, you can customize the pop-up message, scan intervals, and pop-up intervals. Download the pkg, open it, edit, and re-package via composer. 
 
 Pop-up customization:
-/private/tmp/CheckinChecker/CheckinCheckerPrompt.sh
+/private/var/tmp/CheckinChecker/CheckinCheckerPrompt.sh
 
 Scan intervals (default 24 hours): 
-/private/tmp/CheckinChecker/CheckinCheckerKickoff.sh
+/private/var/tmp/CheckinChecker/CheckinCheckerKickoff.sh
 
 Pop-up Intervals: 
-/private/tmp/CheckinChecker/CheckinChecker.sh (go to function checkinCheckerDaemon > edit interval)
+/private/var/tmp/CheckinChecker/CheckinChecker.sh (go to function checkinCheckerDaemon > edit interval)
 
 If you want to change the last checkin trigger (default 90 days):
-/private/tmp/CheckinChecker/CheckinChecker.sh 
+/private/var/tmp/CheckinChecker/CheckinChecker.sh 
 •	Go to line 222, elif [[ $elapsedTime > 7776000 ]]; then and change to desired elapsed time in seconds
 •	Make sure to change all instances of the seconds
 
@@ -144,11 +144,11 @@ _sudo launchctl bootout system/com.checkincheckerprompt_
 
 If you do not see any checkin dates in the jamfcheckinlog.txt make sure you have the daily checkin policy deployed.
 
-Logs can be found at: /private/tmp/CheckinChecker/checkinchecker.log
+Logs can be found at: /private/var/tmp/CheckinChecker/checkinchecker.log
 
 Stop the CheckinChecker program (not recommended, this will NOT stop the pop-ups, see the command above): sudo launchctl bootout system/com.checkinchecker
 
-Remove the program at: /private/tmp/CheckinChecker (delete the folder)
+Remove the program at: /private/var/tmp/CheckinChecker (delete the folder)
 
 
 **Notes**
