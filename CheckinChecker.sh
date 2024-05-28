@@ -165,16 +165,16 @@ checkinCheckerDaemon(){
   sudo chmod 755 ~/Library/LaunchAgents/com.checkincheckerprompt.plist
   
   uid=$(echo $UID)
-  launchctl load ~/Library/LaunchAgents/com.checkincheckerprompt.plist
-  launchctl enable gui/$uid/com.checkincheckerprompt
-  launchctl kickstart -kp gui/$uid/com.checkincheckerprompt
+  launchctl asuser $uid launchctl load ~/Library/LaunchAgents/com.checkincheckerprompt.plist
+  launchctl asuser $uid launchctl enable gui/$uid/com.checkincheckerprompt
+  launchctl asuser $uid launchctl kickstart -kp gui/$uid/com.checkincheckerprompt
 }
 
 deleteCheckerDaemon (){
   uid=$(echo $UID)  
   if [[ -f "/Users/brookeburdick/Library/LaunchAgents/com.checkincheckerprompt.plist" ]]; then
     echo "Checking checker prompt found, Disabling Launch Agent"
-    sudo launchctl bootout gui/$uid/com.checkincheckerprompt
+    launchctl asuser $uid launchctl bootout gui/$uid/com.checkincheckerprompt
     sudo rm -f ~/Library/LaunchAgents/com.checkincheckerprompt.plist
     ScriptLogging "Disabled checkincheckerprompt.plist, User will receive no more prompts"
   else 
