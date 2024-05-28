@@ -13,15 +13,15 @@
     <key>ProgramArguments</key>
     <array>
       <string>/bin/sh</string> 
-      <string>/private/tmp/CheckinChecker/CheckinChecker.sh</string>
+      <string>/private/var/tmp/CheckinChecker/CheckinChecker.sh</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
     <key>StartInterval</key>
     <integer>43200</integer> 
   </dict>
-  </plist>" > /private/tmp/CheckinChecker/checkinchecker.plist
+  </plist>" > /private/var/tmp/CheckinChecker/checkinchecker.plist
   
-  sudo chown root:wheel /private/tmp/CheckinChecker/checkinchecker.plist
-  sudo chmod 755 /private/tmp/CheckinChecker/checkinchecker.plist
-  sudo launchctl load /private/tmp/CheckinChecker/checkinchecker.plist
+  sudo chown root:wheel /private/var/tmp/CheckinChecker/checkinchecker.plist
+  sudo chmod 755 /private/var/tmp/CheckinChecker/checkinchecker.plist
+  sudo launchctl load /private/var/tmp/CheckinChecker/checkinchecker.plist
