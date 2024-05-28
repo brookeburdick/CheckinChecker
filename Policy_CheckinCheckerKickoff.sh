@@ -18,14 +18,16 @@
     <key>RunAtLoad</key>
     <true/>
     <key>StartInterval</key>
-    <integer>600</integer> 
+    <integer>60</integer> 
   </dict>
   </plist>" > ~/Library/LaunchAgents/com.checkinchecker.plist
   
   sudo chown root:wheel ~/Library/LaunchAgents/com.checkinchecker.plist
   sudo chmod 755 ~/Library/LaunchAgents/com.checkinchecker.plist
   
-uid=$(echo $UID)
-launchctl load ~/Library/LaunchAgents/com.checkinchecker.plist
-launchctl enable gui/$uid/com.checkinchecker
-launchctl kickstart -kp gui/$uid/com.checkinchecker
+#find logged in user's UID  
+uid=$(ls -ln /dev/console | awk '{ print $3 }')
+
+launchctl asuser $uid launchctl load ~/Library/LaunchAgents/com.checkinchecker.plist
+launchctl asuser $uid launchctl enable gui/$uid/com.checkinchecker
+launchctl asuser $uid launchctl kickstart -kp gui/$uid/com.checkinchecker
