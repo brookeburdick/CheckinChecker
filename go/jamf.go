@@ -26,6 +26,7 @@ func findJamfBinary() (string, error) {
 }
 
 // forceCheckin ports Bash forceCheckin (lines 126-132): sudo jamf recon + sudo jamf policy.
+// Like the Bash script, this expects execution context that allows sudo/jamf.
 func forceCheckin(jamfBinary string) error {
 	scriptLogging("Running Recon")
 	if err := runCommand("sudo", jamfBinary, "recon"); err != nil {
@@ -39,6 +40,7 @@ func forceCheckin(jamfBinary string) error {
 }
 
 // restartBinary ports Bash restartBinary (lines 135-141): killall jamf then jamf recon.
+// Like the Bash script, this expects execution context that allows sudo commands.
 func restartBinary(jamfBinary string) error {
 	scriptLogging("Restarting Jamf Binary...")
 	if err := runCommand("sudo", "killall", "jamf"); err != nil {

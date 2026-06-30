@@ -105,7 +105,7 @@ func main() {
 			scriptLogging("Failed to remove prompt daemon: %v", err)
 		}
 	} else {
-		scriptLogging("Device has not checked in in over %d days. Elapsed Time is %d (in seconds). Last Checkin was %s", maxDays, int64(elapsed.Seconds()), last.Format(time.RFC3339))
+		scriptLogging("Device has not checked in over %d days. Elapsed Time is %d (in seconds). Last Checkin was %s", maxDays, int64(elapsed.Seconds()), last.Format(time.RFC3339))
 		scriptLogging("Attempting to fix Jamf Binary.")
 		if err := restartBinary(jamfBinary); err != nil {
 			scriptLogging("Failed to restart Jamf Binary: %v", err)
@@ -113,7 +113,7 @@ func main() {
 
 		// Bash lines 253-256 re-check using the same elapsed value and install the prompt daemon.
 		if elapsed >= threshold {
-			scriptLogging("Device has not checked in in over %d days. Last checkin was %s.", maxDays, last.Format(time.RFC3339))
+			scriptLogging("Device has not checked in over %d days. Last checkin was %s.", maxDays, last.Format(time.RFC3339))
 			scriptLogging("Creating LaunchDaemon com.checkincheckerprompt.")
 			if err := installPromptDaemon(); err != nil {
 				scriptLogging("Failed to install prompt daemon: %v", err)

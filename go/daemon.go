@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"strconv"
 )
 
 const promptDaemonLabel = "com.checkincheckerprompt"
@@ -22,6 +21,7 @@ func promptDaemonPlistPath() (string, *user.User, error) {
 }
 
 // installPromptDaemon ports checkinCheckerDaemon (Bash lines 145-171).
+// Like the Bash script, ownership/permission changes here expect root/sudo access.
 func installPromptDaemon() error {
 	plistPath, currentUser, err := promptDaemonPlistPath()
 	if err != nil {
@@ -67,9 +67,6 @@ func installPromptDaemon() error {
 	}
 
 	uid := currentUser.Uid
-	if _, err := strconv.Atoi(uid); err != nil {
-		return fmt.Errorf("parse current user uid %q: %w", currentUser.Uid, err)
-	}
 	if err := runCommand("launchctl", "asuser", uid, "launchctl", "load", plistPath); err != nil {
 		return err
 	}
@@ -100,9 +97,6 @@ func deletePromptDaemon() error {
 	}
 
 	uid := currentUser.Uid
-	if _, err := strconv.Atoi(uid); err != nil {
-		return fmt.Errorf("parse current user uid %q: %w", currentUser.Uid, err)
-	}
 	if err := runCommand("launchctl", "asuser", uid, "launchctl", "bootout", "gui/"+uid+"/"+promptDaemonLabel); err != nil {
 		return err
 	}

@@ -63,6 +63,8 @@ Universal macOS binary (Apple Silicon + Intel):
 
 ```bash
 cd go
+# These are native macOS builds. They also work as cross-compiles when run from
+# another OS with a properly configured Go toolchain.
 GOOS=darwin GOARCH=arm64 go build -o checkinchecker-arm64 .
 GOOS=darwin GOARCH=amd64 go build -o checkinchecker-amd64 .
 lipo -create -output checkinchecker checkinchecker-arm64 checkinchecker-amd64
@@ -81,6 +83,7 @@ go vet ./...
 Operations like `launchctl`, `osascript`, `jamf`, and `killall` are still external system commands on macOS.
 
 Go does not provide native APIs for those tools, so this port shells out via `os/exec`. The improvement is safer structure, clearer error handling, and stronger parsing/type safety around those shell calls.
+As with the Bash version, commands that use `sudo` require an execution context with appropriate privileges (typically root/LaunchDaemon context or equivalent sudoers configuration).
 
 ## Deployment note vs Bash
 
