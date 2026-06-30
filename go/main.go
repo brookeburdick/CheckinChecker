@@ -95,7 +95,7 @@ func main() {
 		if err := forceCheckin(jamfBinary); err != nil {
 			scriptLogging("Force checkin failed: %v", err)
 		}
-		scriptLogging("********************* EXITING CHECKING CHECKER - NO CHECKIN DATE ********************")
+		scriptLogging("********************* EXITING CHECKIN CHECKER - NO CHECKIN DATE ********************")
 		os.Exit(1)
 	}
 
