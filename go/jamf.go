@@ -41,9 +41,7 @@ func forceCheckin(jamfBinary string) error {
 // restartBinary ports Bash restartBinary (lines 135-141): killall jamf then jamf recon.
 func restartBinary(jamfBinary string) error {
 	scriptLogging("Restarting Jamf Binary...")
-	// Build the command name from parts to avoid shell aliases/functions.
-	cmdName := "kill" + "all"
-	if err := runCommand("sudo", cmdName, "jamf"); err != nil {
+	if err := runCommand("sudo", "killall", "jamf"); err != nil {
 		return err
 	}
 	time.Sleep(10 * time.Second)

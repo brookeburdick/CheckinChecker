@@ -54,14 +54,14 @@ func installPromptDaemon() error {
 </plist>
 `
 
-	if err := os.WriteFile(plistPath, []byte(plistContent), 0o755); err != nil {
+	if err := os.WriteFile(plistPath, []byte(plistContent), 0o644); err != nil {
 		return fmt.Errorf("write prompt daemon plist: %w", err)
 	}
 
 	if err := runCommand("sudo", "chown", "root:wheel", plistPath); err != nil {
 		return err
 	}
-	if err := runCommand("sudo", "chmod", "755", plistPath); err != nil {
+	if err := runCommand("sudo", "chmod", "644", plistPath); err != nil {
 		return err
 	}
 

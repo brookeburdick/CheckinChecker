@@ -26,7 +26,7 @@ func setupLogging() error {
 		return fmt.Errorf("create log directory: %w", err)
 	}
 
-	f, err := os.OpenFile(logLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o755)
+	f, err := os.OpenFile(logLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		return fmt.Errorf("open log file: %w", err)
 	}
