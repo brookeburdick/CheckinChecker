@@ -66,11 +66,10 @@ func installPromptDaemon() error {
 		return err
 	}
 
-	uidNum, err := strconv.Atoi(currentUser.Uid)
-	if err != nil {
+	uid := currentUser.Uid
+	if _, err := strconv.Atoi(uid); err != nil {
 		return fmt.Errorf("parse current user uid %q: %w", currentUser.Uid, err)
 	}
-	uid := strconv.Itoa(uidNum)
 	if err := runCommand("launchctl", "asuser", uid, "launchctl", "load", plistPath); err != nil {
 		return err
 	}
@@ -100,11 +99,10 @@ func deletePromptDaemon() error {
 		return fmt.Errorf("check prompt daemon plist: %w", err)
 	}
 
-	uidNum, err := strconv.Atoi(currentUser.Uid)
-	if err != nil {
+	uid := currentUser.Uid
+	if _, err := strconv.Atoi(uid); err != nil {
 		return fmt.Errorf("parse current user uid %q: %w", currentUser.Uid, err)
 	}
-	uid := strconv.Itoa(uidNum)
 	if err := runCommand("launchctl", "asuser", uid, "launchctl", "bootout", "gui/"+uid+"/"+promptDaemonLabel); err != nil {
 		return err
 	}
