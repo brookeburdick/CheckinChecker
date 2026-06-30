@@ -86,8 +86,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	elapsedSeconds := time.Now().Unix() - last.Unix()
-	thresholdSeconds := int64(maxDays * 24 * 60 * 60) // 90 days = 7,776,000 seconds.
+	elapsed := time.Since(last)
+	threshold := time.Duration(maxDays) * 24 * time.Hour
 
 	// Bash line 238 checks for a 0 epoch sentinel ("never checked in").
 	if last.Unix() == 0 {
@@ -99,21 +99,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	if elapsedSeconds < thresholdSeconds {
+	if elapsed < threshold {
 		scriptLogging("Device recently checked in. Last checkin was %s.", last.Format(time.RFC3339))
 		if err := deletePromptDaemon(); err != nil {
 			scriptLogging("Failed to remove prompt daemon: %v", err)
 		}
 	} else {
-		scriptLogging("Device has not checked in in over 90 days. Elapsed Time is %d (in seconds). Last Checkin was %s", elapsedSeconds, last.Format(time.RFC3339))
+		scriptLogging("Device has not checked in in over %d days. Elapsed Time is %d (in seconds). Last Checkin was %s", maxDays, int64(elapsed.Seconds()), last.Format(time.RFC3339))
 		scriptLogging("Attempting to fix Jamf Binary.")
 		if err := restartBinary(jamfBinary); err != nil {
 			scriptLogging("Failed to restart Jamf Binary: %v", err)
 		}
 
 		// Bash lines 253-256 re-check using the same elapsed value and install the prompt daemon.
-		if elapsedSeconds >= thresholdSeconds {
-			scriptLogging("Device has not checked in in over 90 days. Last checkin was %s.", last.Format(time.RFC3339))
+		if elapsed >= threshold {
+			scriptLogging("Device has not checked in in over %d days. Last checkin was %s.", maxDays, last.Format(time.RFC3339))
 			scriptLogging("Creating LaunchDaemon com.checkincheckerprompt.")
 			if err := installPromptDaemon(); err != nil {
 				scriptLogging("Failed to install prompt daemon: %v", err)

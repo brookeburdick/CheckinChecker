@@ -15,7 +15,7 @@ func lastCheckinDate() (time.Time, error) {
 	f, err := os.Open(checkinLog)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return time.Time{}, fmt.Errorf("check-in log file does not exist: %s", checkinLog)
+			return time.Time{}, fmt.Errorf("check-in log file does not exist at %s", checkinLog)
 		}
 		return time.Time{}, fmt.Errorf("open check-in log: %w", err)
 	}

@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strconv"
 )
 
 const promptDaemonLabel = "com.checkincheckerprompt"
@@ -65,7 +66,11 @@ func installPromptDaemon() error {
 		return err
 	}
 
-	uid := currentUser.Uid
+	uidNum, err := strconv.Atoi(currentUser.Uid)
+	if err != nil {
+		return fmt.Errorf("parse current user uid %q: %w", currentUser.Uid, err)
+	}
+	uid := strconv.Itoa(uidNum)
 	if err := runCommand("launchctl", "asuser", uid, "launchctl", "load", plistPath); err != nil {
 		return err
 	}
@@ -95,7 +100,11 @@ func deletePromptDaemon() error {
 		return fmt.Errorf("check prompt daemon plist: %w", err)
 	}
 
-	uid := currentUser.Uid
+	uidNum, err := strconv.Atoi(currentUser.Uid)
+	if err != nil {
+		return fmt.Errorf("parse current user uid %q: %w", currentUser.Uid, err)
+	}
+	uid := strconv.Itoa(uidNum)
 	if err := runCommand("launchctl", "asuser", uid, "launchctl", "bootout", "gui/"+uid+"/"+promptDaemonLabel); err != nil {
 		return err
 	}

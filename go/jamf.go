@@ -42,7 +42,8 @@ func forceCheckin(jamfBinary string) error {
 func restartBinary(jamfBinary string) error {
 	scriptLogging("Restarting Jamf Binary...")
 	if err := runCommand("sudo", "killall", "jamf"); err != nil {
-		return err
+		// Bash did not stop on this failure; continue so recon can still run.
+		scriptLogging("killall jamf did not complete cleanly (continuing): %v", err)
 	}
 	time.Sleep(10 * time.Second)
 	scriptLogging("Running Recon")
